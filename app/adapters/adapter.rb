@@ -2,7 +2,7 @@ require 'open-uri'
 
 module Adapter
   class IMDB
-    attr_accessor :date, :num_of_results
+    attr_accessor :date, :num_of_results, :page
 
     def initialize(date, num_of_results = nil)
       @date = date
@@ -20,6 +20,10 @@ module Adapter
       else
         return Zlib::GzipReader.new(stream).read
       end
+    end
+
+    def create_page
+      @page = Nokogiri::HTML(create_body)
     end
   end
 end
