@@ -38,6 +38,11 @@ module Adapter
       @page.css('div.lister-item.mode-detail')
     end
 
+    def get_name(item)
+      tag = item.css('h3.lister-item-header > a').to_s
+      tag.split("\n")[0].split("> ")[-1]
+    end
+
     def scrape_pages
       response = []
 
@@ -53,10 +58,12 @@ module Adapter
         items = celebrity_items
 
         items.each do |item|
-          puts item
+          response << get_name(item)
         end
-
       end
+
+      response
     end
+    
   end
 end
