@@ -60,10 +60,12 @@ module Adapter
         items.each do |item|
           response << get_name(item)
         end
+
+        @count += 50
       end
 
       response
     end
-    
+
   end
 end
