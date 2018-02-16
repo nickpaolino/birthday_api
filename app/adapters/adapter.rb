@@ -47,7 +47,7 @@ module Adapter
       response = []
 
       # if a set result amount hasn't been established, find the max possible results to use
-      results_limit = @num_of_results.to_i || max_results
+      results_limit = @num_of_results || max_results
 
       # create a while loop that runs until the count reaches the number of possible results for a date
       while (@count < results_limit)
