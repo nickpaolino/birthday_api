@@ -26,6 +26,12 @@ module Adapter
       @page = Nokogiri::HTML(create_body)
     end
 
+    def max_results
+      results_HTML = @page.css('div.desc > span')
+      results_string = results_HTML.to_s.split("names")[0].split(" ")[-1]
+      results_string.to_i
+    end
+
     def scrape_pages
       response = []
 
@@ -33,6 +39,9 @@ module Adapter
       create_page
 
       # create a while loop that runs until the count reaches the number of possible results for a date
+      while (@count < max_results)
+        # query each page
+      end
     end
   end
 end
