@@ -50,7 +50,7 @@ module Adapter
       results_limit = max_results
 
       # create a while loop that runs until the count reaches the number of possible results for a date
-      while (@count < results_limit)
+      while (@count < 500)
         # query each page
         create_page
 
@@ -58,6 +58,7 @@ module Adapter
         items = celebrity_items
 
         items.each do |item|
+          puts item
           response << get_name(item)
         end
 
