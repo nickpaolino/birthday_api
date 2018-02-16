@@ -23,11 +23,12 @@ module Adapter
     end
 
     def create_page
+      # create the Nokogiri object and assign to instance variable
       @page = Nokogiri::HTML(create_body)
     end
 
     def max_results
-      results_HTML = @page.css('div.desc > span')
+      results_HTML = create_page.css('div.desc > span')
       results_string = results_HTML.to_s.split("names")[0].split(" ")[-1]
       results_string.to_i
     end
@@ -35,12 +36,15 @@ module Adapter
     def scrape_pages
       response = []
 
-      # create the Nokogiri object and assign to instance variable
-      create_page
+      # call max_results and assign to a variable for while loop
+      results_limit = max_results
 
       # create a while loop that runs until the count reaches the number of possible results for a date
-      while (@count < max_results)
+      while (@count < results_limit)
         # query each page
+        create_page
+
+
       end
     end
   end
