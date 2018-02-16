@@ -7,11 +7,11 @@ module Adapter
     def initialize(date, num_of_results = nil)
       @date = date
       @num_of_results = num_of_results
-      stream
+      @count = 1
     end
 
     def stream
-      return open("http://www.imdb.com/search/name?birth_monthday=05_24&start=1&ref_=rlm")
+      return open("http://www.imdb.com/search/name?birth_monthday=#{@date}&start=#{@count}&ref_=rlm")
     end
 
     def create_body
@@ -24,6 +24,10 @@ module Adapter
 
     def create_page
       @page = Nokogiri::HTML(create_body)
+    end
+
+    def scrape_pages
+
     end
   end
 end
