@@ -27,7 +27,12 @@ module Adapter
     end
 
     def scrape_pages
+      response = []
 
+      # create the Nokogiri object and assign to instance variable
+      create_page
+
+      # create a while loop that runs until the count reaches the number of possible results for a date
     end
   end
 end
