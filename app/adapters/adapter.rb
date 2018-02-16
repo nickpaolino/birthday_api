@@ -33,6 +33,11 @@ module Adapter
       results_string.to_i
     end
 
+    def celebrity_items
+      # create items from scraping the class containing each actor/actresses info
+      @page.css('div.lister-item.mode-detail')
+    end
+
     def scrape_pages
       response = []
 
@@ -44,6 +49,12 @@ module Adapter
         # query each page
         create_page
 
+        # call the celebrity_items method and assign to a local variable
+        items = celebrity_items
+
+        items.each do |item|
+          puts item
+        end
 
       end
     end
