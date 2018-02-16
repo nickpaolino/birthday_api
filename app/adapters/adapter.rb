@@ -14,5 +14,12 @@ module Adapter
       return open("http://www.imdb.com/search/name?birth_monthday=05_24&start=1&ref_=rlm")
     end
 
+    def create_body
+      if (stream.content_encoding.empty?)
+        return stream.read
+      else
+        return Zlib::GzipReader.new(stream).read
+      end
+    end
   end
 end
