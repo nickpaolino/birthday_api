@@ -46,11 +46,11 @@ module Adapter
     def scrape_pages
       response = []
 
-      # call max_results and assign to a variable for while loop
-      results_limit = max_results
+      # if a set result amount hasn't been established, find the max possible results to use
+      results_limit = @num_of_results.to_i || max_results
 
       # create a while loop that runs until the count reaches the number of possible results for a date
-      while (@count < 500)
+      while (@count < results_limit)
         # query each page
         create_page
 
@@ -58,12 +58,13 @@ module Adapter
         items = celebrity_items
 
         items.each do |item|
-          puts item
           response << get_name(item)
         end
 
         @count += 50
       end
+
+      puts response.length
 
       response
     end
