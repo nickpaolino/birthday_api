@@ -47,10 +47,17 @@ module Adapter
       item.css('div.lister-item-image').to_s.split("src=")[-1].split(" ")[0][1..-2]
     end
 
+    def get_profile_url(item)
+      url_tag = item.css('div.lister-item-image').to_s.split("/name/")[1]
+      id = url_tag.split("\"")[0]
+      "http://www.imdb.com/name/#{id}"
+    end
+
     def create_response(item)
       {
         name: get_name(item),
-        photoUrl: get_photo_url(item)
+        photoUrl: get_photo_url(item),
+        profileUrl: get_profile_url(item)
       }
     end
 
