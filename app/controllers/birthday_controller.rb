@@ -1,7 +1,9 @@
 class BirthdayController < ApplicationController
   def show
     date = params["q"]
-    num_of_results = params["results"].to_i
+    if (params["results"])
+      num_of_results = params["results"].to_i
+    end
 
     adapter = Adapter::IMDB.new(date, num_of_results)
 
