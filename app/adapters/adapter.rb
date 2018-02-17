@@ -29,13 +29,12 @@ module Adapter
         items = celebrity_items(page)
 
         items.each do |item|
+          # for each item on the page, scrape the data and create a hash with the necessary fields
           response << create_response(item)
         end
-        puts "Count is: #{@count}"
+
         @count += 50
       end
-
-      puts response.length
 
       response
     end
@@ -72,6 +71,7 @@ module Adapter
     end
 
     def get_name(item)
+      # gets the name of the celebrity from scraping the h3 tag
       tag = item.css('h3.lister-item-header > a').to_s
       if (tag)
         tag.split("\n")[0].split("> ")[-1]
@@ -81,6 +81,7 @@ module Adapter
     end
 
     def get_photo_url(item)
+      # gets the image url from the lister-item-image class's img tag
       image_tag = item.css('div.lister-item-image').to_s
       if (image_tag)
         image_tag.split("src=")[-1].split(" ")[0][1..-2]
@@ -90,6 +91,7 @@ module Adapter
     end
 
     def get_profile_url(item)
+      # gets the profile url from the link in the lister-item-image class
       url_tag = item.css('div.lister-item-image').to_s
       if (url_tag)
         id = url_tag.split("/name/")[1].split("\"")[0]
@@ -100,14 +102,11 @@ module Adapter
     end
 
     def title_url(item)
+      # gets the title_url from the lister-item-content div's a tag
       title_url = item.css('div.lister-item-content > p > a').to_s
       if (title_url)
         title_tag = title_url.split("/title/")[1]
-        if (title_tag)
-          title_tag.split("/")[0]
-        else
-          "Title URL not found"
-        end
+        title_tag.split("/")[0] if title_tag
       else
         "Title URL not found"
       end
@@ -124,6 +123,7 @@ module Adapter
     end
 
     def get_rating(page)
+      # the rating is scraped from the span tag with rating class's inner text
       rating_tag = page.css('span.rating').inner_text
       if (rating_tag)
         rating_tag.split("/")[0]
@@ -133,10 +133,9 @@ module Adapter
     end
 
     def get_director(page)
+      # the director is being scraped from the inner text of the div, credit_summary_item
       director_tag = page.css('div.credit_summary_item > span').inner_text
       if (director_tag.length != 0)
-        puts "Director: " + director_tag
-        puts director_tag.length
         director_tag.split("\n")[1].strip()
       else
         "No Director Listed"
@@ -144,20 +143,32 @@ module Adapter
     end
 
     def get_most_known_work(item)
+      # the relative url is affixed to the full url
       url = "http://www.imdb.com/title/#{title_url(item)}"
       begin
+        # set the retries variable
         retries ||= 0
-        puts "trying #{retries}"
+
+        # try to load the page into a Nokogiri object
         page = Nokogiri::HTML(open(url))
+
+      # if loading the page fails
       rescue Exception
+        # retry up to 3 times
         retry if (retries += 1) < 3
       end
 
-      create_most_known_work_response(page, url)
+      # if the page hasn't been loaded after those 3 tries then return an empty hash
+      if (!page)
+        {}
+      else
+        # if the page has been loaded then create the mostKnownWork nested response from the title page
+        create_most_known_work_response(page, url)
+      end
     end
 
     def create_most_known_work_response(page, url)
-      puts "URL IS: #{url}"
+      # creates a hash with the necessary fields using helper methods to scrape the data
       begin
         {
           title: get_title(page),
@@ -169,6 +180,7 @@ module Adapter
     end
 
     def create_response(item)
+      # the response hash is returned via helper methods that scrape the page
       {
         name: get_name(item),
         photoUrl: get_photo_url(item),
