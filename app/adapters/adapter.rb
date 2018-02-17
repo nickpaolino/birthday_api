@@ -43,6 +43,12 @@ module Adapter
       tag.split("\n")[0].split("> ")[-1]
     end
 
+    def create_response(item)
+      {
+        name: get_name(item)
+      }
+    end
+
     def scrape_pages
       response = []
 
@@ -58,7 +64,7 @@ module Adapter
         items = celebrity_items
 
         items.each do |item|
-          response << get_name(item)
+          response << create_response(item)
         end
 
         @count += 50
