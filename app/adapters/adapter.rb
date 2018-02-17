@@ -43,9 +43,14 @@ module Adapter
       tag.split("\n")[0].split("> ")[-1]
     end
 
+    def get_photo_url(item)
+      item.css('div.lister-item-image').to_s.split("src=")[-1].split(" ")[0][1..-2]
+    end
+
     def create_response(item)
       {
-        name: get_name(item)
+        name: get_name(item),
+        photoUrl: get_photo_url(item)
       }
     end
 
