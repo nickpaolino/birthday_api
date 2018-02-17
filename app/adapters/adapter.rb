@@ -55,13 +55,19 @@ module Adapter
 
     def get_most_known_work(item)
       url = "http://www.imdb.com/title/#{title_url(item)}"
-      page = Nokogiri::HTML(open(url))
+      begin
+        page = Nokogiri::HTML(open(url))
+      # rescue Exception => ex
+      #   log.error "Error: #{ex}"
+      #   retry
+      end
       create_most_known_work_response(page, url)
     end
 
     def create_most_known_work_response(page, url)
+      puts "URL IS: #{url}"
       {
-        title: get_title(page)
+        title: get_title(page),
         url: url
       }
     end
