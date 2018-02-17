@@ -53,13 +53,21 @@ module Adapter
       page.css("div.title_wrapper > h1").inner_html.split("<")[0][0..-2]
     end
 
+    def get_rating(page)
+      page.css('span.rating').inner_text.split("/")[0]
+    end
+
+    def get_director(page)
+      page.css('div.credit_summary_item > span').to_s.split("name")[2].split(">")[1].split("<")[0]
+    end
+
     def get_most_known_work(item)
       url = "http://www.imdb.com/title/#{title_url(item)}"
       begin
+        puts "trying"
         page = Nokogiri::HTML(open(url))
-      # rescue Exception => ex
-      #   log.error "Error: #{ex}"
-      #   retry
+      rescue Exception => ex
+        retry
       end
       create_most_known_work_response(page, url)
     end
@@ -68,7 +76,9 @@ module Adapter
       puts "URL IS: #{url}"
       {
         title: get_title(page),
-        url: url
+        url: url,
+        rating: get_rating(page),
+        director: get_director(page)
       }
     end
 
@@ -89,6 +99,9 @@ module Adapter
 
       # create a while loop that runs until the count reaches the number of possible results for a date
       while (@count < results_limit)
+        if (@count == 10)
+          return response
+        end
         # query each page
         create_page
 
