@@ -10,21 +10,13 @@ module Adapter
       @count = 1
     end
 
-    def stream
-      return open("http://www.imdb.com/search/name?birth_monthday=#{@date}&start=#{@count}&ref_=rlm")
-    end
-
-    def create_body
-      if (stream.content_encoding.empty?)
-        return stream.read
-      else
-        return Zlib::GzipReader.new(stream).read
-      end
+    def url
+      "http://www.imdb.com/search/name?birth_monthday=#{@date}&start=#{@count}&ref_=rlm"
     end
 
     def create_page
       # create the Nokogiri object and assign to instance variable
-      @page = Nokogiri::HTML(create_body)
+      @page = Nokogiri::HTML(open(url))
     end
 
     def max_results
@@ -53,11 +45,33 @@ module Adapter
       "http://www.imdb.com/name/#{id}"
     end
 
+    def title_url(item)
+      item.css('div.lister-item-content > p > a').to_s.split("/title/")[1].split("/")[0]
+    end
+
+    def get_title(page)
+      page.css("div.title_wrapper > h1").inner_html.split("<")[0][0..-2]
+    end
+
+    def get_most_known_work(item)
+      url = "http://www.imdb.com/title/#{title_url(item)}"
+      page = Nokogiri::HTML(open(url))
+      create_most_known_work_response(page, url)
+    end
+
+    def create_most_known_work_response(page, url)
+      {
+        title: get_title(page)
+        url: url
+      }
+    end
+
     def create_response(item)
       {
         name: get_name(item),
         photoUrl: get_photo_url(item),
-        profileUrl: get_profile_url(item)
+        profileUrl: get_profile_url(item),
+        mostKnownWork: get_most_known_work(item)
       }
     end
 
