@@ -26,6 +26,31 @@ you do not specify a results param, the default results value is 10.
 
 https://birthday-api.herokuapp.com/birthday?q=02-02&results=15
 
+## Deployment
+
+Due to Heroku's 30 second request timeout, the default results value has been
+set to 10. Anything around 50 results or more will generally take over 30
+seconds to process and there will be a timeout on Heroku. To hit the API for
+larger results, follow the instructions to install locally.
+
+## Installing & Running Locally
+
+1. Clone or download the repo to your local machine.
+
+* `git clone git@github.com:nickpaolino/birthday_api.git`
+
+2. Install the gems and packages
+
+* `bundle install`
+
+3. Start the server locally
+
+* `rails s`
+
+4. Query the API with any results param
+
+* http://localhost:3000/birthday?q=02-02&results=1000
+
 ## Technology
 
 This API uses Ruby on Rails and is deployed via Heroku. There are two main
