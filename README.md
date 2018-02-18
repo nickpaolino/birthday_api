@@ -21,10 +21,10 @@ To use this API, change the params for the date in the URL.
 
 https://birthday-api.herokuapp.com/birthday?q=02-02
 
-You can add an optional results param to return results in increments of 50. If
-you do not specify a results param, the default results value is 50.
+You can add an optional results param to return a specific number of results. If
+you do not specify a results param, the default results value is 10.
 
-https://birthday-api.herokuapp.com/birthday?q=02-02&results=100
+https://birthday-api.herokuapp.com/birthday?q=02-02&results=15
 
 ## Technology
 
