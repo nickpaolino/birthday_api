@@ -31,9 +31,9 @@ module Adapter
         items.each do |item|
           # for each item on the page, scrape the data and create a hash with the necessary fields
           response << create_response(item)
+          break if @count == @num_of_results
+          @count += 1
         end
-
-        @count += 50
       end
 
       response

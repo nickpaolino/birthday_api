@@ -8,8 +8,8 @@ class BirthdayController < ApplicationController
       # assign to results parameter for class instance
       num_of_results = params["results"].to_i
     else
-      # otherwise set default results as 50
-      num_of_results = 50
+      # otherwise set default results as 10
+      num_of_results = 10
     end
 
     # create instance of IMDB Adapter to scrape results
